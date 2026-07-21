@@ -8,7 +8,6 @@ from dalio_sovereign_strength_index.engines.engine_fred import FredDataEngine
 
 class MacroDataPipeline:
     def __init__(self):
-        # Register separate alternative tracking engines modularly
         self.engines = [
             WorldBankDataEngine(),
             FredDataEngine()
@@ -24,8 +23,9 @@ class MacroDataPipeline:
             if master_df is None:
                 master_df = engine_df
             else:
-                # Merge datasets cleanly using unified index identifiers
                 master_df = pd.merge(master_df, engine_df, on=['year', 'Country'], how='outer')
                 
-        # Linearly interpolate gaps to guarantee continuous analytical execution rows
+        # Force core merge key properties to integers to block type mismatches during line fits
+        master_df['year'] = master_df['year'].astype(int)
+        
         return master_df.sort_values(['Country', 'year']).interpolate(method='linear').fillna(0.5)

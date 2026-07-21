@@ -23,12 +23,12 @@ class WorldBankDataEngine(BaseDataEngine):
 
         for name, code in self.indicators.items():
             try:
-                # Utilizing the explicit World Bank data reader implementation
-                df = wb.download(indicator=code, country=['US', 'CN'], start=start_yr, end=end_yr)
+                # Explicitly passing structural year integers to the downloader
+                df = wb.download(indicator=code, country=['US', 'CN'], start=int(start_yr), end=int(end_yr))
                 df = df.reset_index()
                 
-                # Normalize and ensure strict integer tracking for numerical index merges
-                df['year'] = df['year'].astype(int)
+                # FIX: Explicit type coercion of year and conversion string keys to integer datatypes
+                df['year'] = pd.to_numeric(df['year']).astype(int)
                 df['Country'] = df['country'].map({'United States': 'US', 'China': 'CN'})
                 
                 df_clean = df[['year', 'Country', code]].rename(columns={code: name})
@@ -46,7 +46,7 @@ class WorldBankDataEngine(BaseDataEngine):
     def _generate_fallback_matrix(self, start_yr: int, end_yr: int) -> pd.DataFrame:
         """Generates structured proxy curves guaranteeing strict integer typing."""
         records = []
-        for yr in range(start_yr, end_yr + 1):
+        for yr in range(int(start_yr), int(end_yr) + 1):
             records.append({'year': int(yr), 'Country': 'US', 'GDP_Share': 24.5, 'Trade_Share': 11.2, 'Education_Exp': 4.9, 'R_D_Spend': 3.1, 'Military_Exp': 3.4})
             records.append({'year': int(yr), 'Country': 'CN', 'GDP_Share': 18.2, 'Trade_Share': 13.5, 'Education_Exp': 4.1, 'R_D_Spend': 2.6, 'Military_Exp': 1.7})
         return pd.DataFrame(records)

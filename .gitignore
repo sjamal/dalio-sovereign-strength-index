@@ -16,5 +16,5 @@ env/
 .DS_Store
 Thumbs.db
 
-  # Streamlit agent skills (environment-specific symlinks)
-  .agents/skills/developing-with-streamlit/
+# Streamlit agent skills (environment-specific symlinks)
+.agents/skills/developing-with-streamlit/
