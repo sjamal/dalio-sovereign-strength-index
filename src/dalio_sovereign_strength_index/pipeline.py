@@ -3,6 +3,7 @@ Central Ingestion Pipeline Orchestrator.
 Loops through decoupled alternative modules to build an aggregate analytical table.
 """
 import pandas as pd
+from dalio_sovereign_strength_index.engines.engine_demographics import DemographicDataEngine
 from dalio_sovereign_strength_index.engines.engine_worldbank import WorldBankDataEngine
 from dalio_sovereign_strength_index.engines.engine_fred import FredDataEngine
 
@@ -10,7 +11,8 @@ class MacroDataPipeline:
     def __init__(self):
         self.engines = [
             WorldBankDataEngine(),
-            FredDataEngine()
+            FredDataEngine(),
+            DemographicDataEngine()
         ]
 
     def execute_pipeline(self, start_yr: int, end_yr: int) -> pd.DataFrame:
