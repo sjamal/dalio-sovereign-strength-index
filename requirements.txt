@@ -5,3 +5,4 @@ numpy>=1.26.0
 pandas-datareader>=0.10.0
 requests>=2.31.0
 mcp>=0.1.0
+streamlit>=1.30.0

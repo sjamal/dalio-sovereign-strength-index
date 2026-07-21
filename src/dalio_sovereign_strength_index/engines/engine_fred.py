@@ -19,7 +19,12 @@ class FredDataEngine(BaseDataEngine):
                 'year': yr, 
                 'Country': 'US', 
                 'Debt_To_GDP': 121.5 + (yr - start_yr) * 1.4,
-                                                                                                                             'Count                                                                      3,
+                'M2_Velocity': 1.15
+            })
+            records.append({
+                'year': yr, 
+                'Country': 'CN', 
+                'Debt_To_GDP': 76.8 + (yr - start_yr) * 2.3,
                 'M2_Velocity': 0.85
             })
         return pd.DataFrame(records)

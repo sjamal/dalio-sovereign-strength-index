@@ -4,7 +4,10 @@ Handles automated remote retrieval of real economy metrics.
 """
 import datetime
 import pandas as pd
-import pandas_datareader.data as web
+try:
+    from pandas_datareader import data as web
+except ImportError:
+    web = None
 from dalio_sovereign_strength_index.engines.base_engine import BaseDataEngine
 
 class WorldBankDataEngine(BaseDataEngine):
@@ -19,23 +22,32 @@ class WorldBankDataEngine(BaseDataEngine):
         }
 
     def fetch_data(self, start_yr: int, end_yr: int) -> pd.DataFrame:
-        """Queries         """Queries         """Queries         """Queries         """Queries 
+        """Queries World Bank API for economic indicators."""
         start = datetime.datetime(start_yr, 1, 1)
         end = datetime.datetime(end_yr, 12, 31)
         frames = []
 
-        for name, code in self.i        for name, code         try:
+        for name, code in self.indicators.items():
+            try:
                 # Direct analytical query over remote network protocols
-                df = web.DataReader(code, 'worldbank', start, end).reset_in                df = web.DataReader(code, 'worldbank', start, end).reset_in                           df untry'].i                df = web.DataReader(code, 'worldbank', start, end).reseuntry'                df = web.DataReader(code, 'worldbank', start, end).reset_in  ['year'].astype(int)
+                df = web.DataReader(code, 'worldbank', start, end).reset_index()
+                df['year'] = df['year'].astype(int)
                 
-                df_clean = df[['year', 'Country',                 df_clean = df[['year', 'Country',                 df_clean.se                df_clean = df[['year', 'Country',                 df_cle         print(f"[W                df_clean = df[['year', 'Country',              : {e}")                df_clean = df[['year', 'Country',                 df_clean = df[['year', 'eam evaluation states if API keys choke
-            retu            retu            retu       _yr, end_                
+                df_clean = df[['year', 'Country', code]]
+                df_clean.rename(columns={code: name}, inplace=True)
+                frames.append(df_clean)
+            except Exception as e:
+                print(f"[WARNING] Failed to fetch {name}: {e}")
+        
+        if not frames:
+            return self._generate_fallback_data(start_yr, end_yr)
+        
         return pd.concat(frames, axis=1).reset_index()
 
-    def _generat    def _generat    def _generat    def _generat    def _geataFrame:
+    def _generate_fallback_data(self, start_yr: int, end_yr: int) -> pd.DataFrame:
         """Generates structured proxy curves matching archetypal book dynamics."""
         records = []
         for yr in range(start_yr, end_yr + 1):
             records.append({'year': yr, 'Country': 'US', 'GDP_Share': 24.5, 'Trade_Share': 11.2, 'Education_Exp': 4.9, 'R_D_Spend': 3.1, 'Military_Exp': 3.4})
-            records.append({'year': yr, 'Country': 'CN',     _Share': 18.2, 'Trade_Share': 13.5, 'Education_Exp': 4.1, 'R_D_Spend': 2.6, 'Military_Exp': 1.7})
+            records.append({'year': yr, 'Country': 'CN', 'GDP_Share': 18.2, 'Trade_Share': 13.5, 'Education_Exp': 4.1, 'R_D_Spend': 2.6, 'Military_Exp': 1.7})
         return pd.DataFrame(records)
