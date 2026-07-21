@@ -51,12 +51,12 @@ try:
         st.warning(f"**Calculated Lifecycle State**: {latest_cn['Stage']}")
         
     st.subheader("Relative System Trajectory Over Time")
-    # Clean pivoting for time-series charts
     chart_data = data.pivot(index='year', columns='Country', values='Dalio_Power_Index')
     st.line_chart(chart_data)
     
     st.subheader("📊 Underlying Analytical Indicators Matrix")
-    st.dataframe(data[['year', 'Country', 'Dalio_Power_Index', 'Debt_To_GDP', 'Military_Exp', 'Stage']], use_container_width=True)
+    # FIX: Updated use_container_width to meet current layout specification standards
+    st.dataframe(data[['year', 'Country', 'Dalio_Power_Index', 'Debt_To_GDP', 'Military_Exp', 'Stage']], width='stretch')
 
 except Exception as e:
     st.error(f"Failed to execute visualization layer pipeline: {e}")

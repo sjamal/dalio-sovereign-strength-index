@@ -23,9 +23,23 @@ class MacroDataPipeline:
             if master_df is None:
                 master_df = engine_df
             else:
+                # Force columns to string types before merging to ensure string keys line up cleanly
+                master_df['year'] = master_df['year'].astype(str)
+                master_df['Country'] = master_df['Country'].astype(str)
+                engine_df['year'] = engine_df['year'].astype(str)
+                engine_df['Country'] = engine_df['Country'].astype(str)
+                
                 master_df = pd.merge(master_df, engine_df, on=['year', 'Country'], how='outer')
                 
-        # Force core merge key properties to integers to block type mismatches during line fits
-        master_df['year'] = master_df['year'].astype(int)
+        # FIX: Strip multi-index object artifacts and force structural keys back to numeric metrics
+        master_df['year'] = pd.to_numeric(master_df['year'], errors='coerce').astype(int)
+        master_df['Country'] = master_df['Country'].astype(str)
         
-        return master_df.sort_values(['Country', 'year']).interpolate(method='linear').fillna(0.5)
+        # Sort values precisely before applying line interpolation mechanics
+        master_df = master_df.sort_values(['Country', 'year']).reset_index(drop=True)
+        
+        # Isolate index keys from numeric interpolation data matrices
+        numeric_cols = master_df.select_dtypes(include=['number']).columns
+        master_df[numeric_cols] = master_df[numeric_cols].interpolate(method='linear').fillna(0.5)
+        
+        return master_df

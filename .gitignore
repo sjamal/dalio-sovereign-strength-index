@@ -16,5 +16,8 @@ env/
 .DS_Store
 Thumbs.db
 
+# Explicitly exclude local agent directories across all structural scopes
+.agents/
+.agents
 # Streamlit agent skills (environment-specific symlinks)
 .agents/skills/developing-with-streamlit/
