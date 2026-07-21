@@ -24,11 +24,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      # FIX: Adjusted path routing layout to match the correct target package location directory
+      # FIX: Point directly to the true location of the runner script
       - name: Verify Core Ingestion Pass
         run: |
           export PYTHONPATH=src
-          python src/dalio_sovereign_strength_index/run_brain.py
+          python src/run_brain.py
 
       - name: Run Test Verification Suite via Pytest
         run: |
