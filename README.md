@@ -8,6 +8,12 @@ An open-source quantitative analysis platform implementing Ray Dalio's macrocycl
 * **Algorithmic Cycle Evaluator**: Equal-weighted normalization scoring historical engine paths.
 * **Multi-Channel Interface Layers**: Native FastAPI endpoints, a responsive Streamlit UI, and an MCP (Model Context Protocol) Server for AI agent interoperability.
 
+### 🔧 Automated Infrastructure & Test Frameworks
+*   **Chaos Engine Validation (`tests/test_chaos.py`)**: Continuously injects invalid datatypes, null parameters, and malformed strings to ensure execution calculations remain stable under external API crashes.
+*   **Performance Tracking Reporter (`scripts/mcp_bench_reporter.py`)**: Runs high-speed benchmarking loops over JSON-RPC streams to verify communication layers and auto-compile plain-text analytics summaries.
+*   **Demographic Contraction Vector (`engine_demographics.py`)**: Integrates Peter Zeihan's country metrics to track labor force shortages alongside Dalio's leverage variables.
+
+
 ## Navigation Roadmap
 * Review localized operations parameters inside the [Operations Reference Manual](docs/USER_MANUAL.md).
 * Deep dive into processing schemas inside the [Architectural Specification Log](docs/ARCHITECTURE.md).

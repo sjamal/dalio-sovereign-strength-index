@@ -104,3 +104,27 @@ try:
 
 except Exception as e:
     st.error(f"Failed to execute visualization layer pipeline: {e}")
+
+# This creates an automated secondary tab on the Streamlit dashboard dedicated to system performance graphs
+
+st.markdown("---")
+st.subheader("⚙️ System Performance and Diagnostic Operations")
+
+# Create functional tabs separating macro analytics from engineering diagnostics
+tab1, tab2 = st.tabs(["Superpower Macro Trends", "MCP Server Automation Performance"])
+
+with tab1:
+    st.caption("Review superpower multi-determinant vectors inside the primary matrix above.")
+
+with tab2:
+    st.markdown("### Model Context Protocol (MCP) Stream Velocity Trends")
+    try:
+        # Dynamically read the generated CSV file directly from your docs directory
+        bench_data = pd.read_csv("docs/mcp_performance_trends.csv")
+        
+        # Format columns for scannable charting displays
+        bench_data = bench_data.set_index('Iteration')
+        st.line_chart(bench_data)
+        st.caption("Tracks engine response velocities in milliseconds across consecutive automated JSON-RPC loops.")
+    except FileNotFoundError:
+        st.info("💡 Run `python scripts/mcp_bench_reporter.py` to generate the performance trends plot data.")
