@@ -1,13 +1,9 @@
 """
 World Bank Alternative Data Ingestion Module.
-Handles automated remote retrieval of real economy metrics.
+Handles automated remote retrieval of real economy metrics using official sub-modules.
 """
-import datetime
 import pandas as pd
-try:
-    from pandas_datareader import data as web
-except ImportError:
-    web = None
+from pandas_datareader import wb
 from dalio_sovereign_strength_index.engines.base_engine import BaseDataEngine
 
 class WorldBankDataEngine(BaseDataEngine):
@@ -22,32 +18,35 @@ class WorldBankDataEngine(BaseDataEngine):
         }
 
     def fetch_data(self, start_yr: int, end_yr: int) -> pd.DataFrame:
-        """Queries World Bank API for economic indicators."""
-        start = datetime.datetime(start_yr, 1, 1)
-        end = datetime.datetime(end_yr, 12, 31)
+        """Queries the World Bank sub-module and formats parameters into a standardized numeric table."""
         frames = []
 
         for name, code in self.indicators.items():
             try:
-                # Direct analytical query over remote network protocols
-                df = web.DataReader(code, 'worldbank', start, end).reset_index()
-                df['year'] = df['year'].astype(int)
+                # Utilizing the explicit World Bank data reader implementation
+                df = wb.download(indicator=code, country=['US', 'CN'], start=start_yr, end=end_yr)
+                df = df.reset_index()
                 
-                df_clean = df[['year', 'Country', code]]
-                df_clean.rename(columns={code: name}, inplace=True)
-                frames.append(df_clean)
+                # Normalize and ensure strict integer tracking for numerical index merges
+                df['year'] = df['year'].astype(int)
+                df['Country'] = df['country'].map({'United States': 'US', 'China': 'CN'})
+                
+                df_clean = df[['year', 'Country', code]].rename(columns={code: name})
+                frames.append(df_clean.set_index(['year', 'Country']))
             except Exception as e:
-                print(f"[WARNING] Failed to fetch {name}: {e}")
-        
-        if not frames:
-            return self._generate_fallback_data(start_yr, end_yr)
-        
-        return pd.concat(frames, axis=1).reset_index()
+                print(f"[WARNING] Local network bypass triggered for {name}: {e}")
 
-    def _generate_fallback_data(self, start_yr: int, end_yr: int) -> pd.DataFrame:
-        """Generates structured proxy curves matching archetypal book dynamics."""
+        if not frames:
+            return self._generate_fallback_matrix(start_yr, end_yr)
+            
+        res = pd.concat(frames, axis=1).reset_index()
+        res['year'] = res['year'].astype(int)
+        return res
+
+    def _generate_fallback_matrix(self, start_yr: int, end_yr: int) -> pd.DataFrame:
+        """Generates structured proxy curves guaranteeing strict integer typing."""
         records = []
         for yr in range(start_yr, end_yr + 1):
-            records.append({'year': yr, 'Country': 'US', 'GDP_Share': 24.5, 'Trade_Share': 11.2, 'Education_Exp': 4.9, 'R_D_Spend': 3.1, 'Military_Exp': 3.4})
-            records.append({'year': yr, 'Country': 'CN', 'GDP_Share': 18.2, 'Trade_Share': 13.5, 'Education_Exp': 4.1, 'R_D_Spend': 2.6, 'Military_Exp': 1.7})
+            records.append({'year': int(yr), 'Country': 'US', 'GDP_Share': 24.5, 'Trade_Share': 11.2, 'Education_Exp': 4.9, 'R_D_Spend': 3.1, 'Military_Exp': 3.4})
+            records.append({'year': int(yr), 'Country': 'CN', 'GDP_Share': 18.2, 'Trade_Share': 13.5, 'Education_Exp': 4.1, 'R_D_Spend': 2.6, 'Military_Exp': 1.7})
         return pd.DataFrame(records)
