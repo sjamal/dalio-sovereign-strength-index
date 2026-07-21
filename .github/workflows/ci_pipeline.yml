@@ -10,21 +10,18 @@ jobs:
   validate_codebase:
     runs-on: ubuntu-latest
     steps:
-      # Native Linux environment check setup bypassing legacy Node wrapper loops
-      - name: Checkout Code Repository Natively
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            .gitignore
-            requirements.txt
-            src
-            tests
-            scripts
-            docs
-
-      - name: Deploy Native Python 3.11 Environment Runtime
+      # FIX: Use native Linux git tools to eliminate legacy node action triggers completely
+      - name: Clone Code Repository Natively
         run: |
-          sudo apt-get update
+          git clone --depth 1 https://github.com .
+          git checkout ${{ github.ref_name }}
+
+      # FIX: Enforce non-interactive frontends to eliminate exit code 100 failures
+      - name: Deploy Native Python 3.11 Environment Runtime
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update -y
           sudo apt-get install -y python3.11 python3.11-venv python3-pip
 
       - name: Install System Dependencies
