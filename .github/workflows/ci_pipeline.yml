@@ -10,30 +10,26 @@ jobs:
   validate_codebase:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Securely pull the entire workspace branch cleanly using the modern release
       - name: Checkout Code Repository
         uses: actions/checkout@v4
 
-      # Step 2: Establish the isolated Python 3.11 development environment runner
       - name: Setup Python Runtime Environment
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Step 3: Install all core required packages from the requirements manifest
       - name: Install System Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
 
-      # Step 4: Run the integration verification passthrough trace loop
+      # FIX: Adjusted path routing layout to match the correct target package location directory
       - name: Verify Core Ingestion Pass
         run: |
           export PYTHONPATH=src
-          python src/run_brain.py
+          python src/dalio_sovereign_strength_index/run_brain.py
 
-      # Step 5: Execute the full pytest safety verification matrix checks
       - name: Run Test Verification Suite via Pytest
         run: |
           export PYTHONPATH=src
