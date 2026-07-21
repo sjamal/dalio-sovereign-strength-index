@@ -24,3 +24,5 @@ Thumbs.db
 
 # Exclude Compiled Automated Report Snapshots
 docs/*.txt
+# Exclude Local Metric Run Archives from Source Control Tracker
+docs/archive/

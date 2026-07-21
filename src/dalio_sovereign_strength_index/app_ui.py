@@ -1,7 +1,6 @@
 """
 Streamlit Web Analytics Presentation Interface.
-Generates interactive charting grids and breaks down macroeconomic metrics
-for symmetric sovereign shock simulations between the US and China.
+Symmetric coloring and advanced tabbed performance layouts.
 """
 import streamlit as st
 import pandas as pd
@@ -33,23 +32,15 @@ cn_mil_shock = st.sidebar.slider("China Military Budget Alteration (% GDP)", -2.
 # ----------------------------------------------------------------------
 @st.cache_data
 def run_stress_pipeline(s, e, us_ds, us_ms, cn_ds, cn_ms):
-    """
-    Executes the modular stress test data engine with symmetric inputs,
-    normalizes the metrics, and returns calculated cycle classifications.
-    """
+    """Executes the modular data engine and assigns lifecycle stages."""
     from dalio_sovereign_strength_index.engines.engine_stress_test import StressTestEngine
     engine = DalioAnalysisEngine()
     
-    # Instantiate the modular stress plugin with symmetric parameters
     stress_pipeline = StressTestEngine(
-        us_debt_shock=us_ds, 
-        us_military_shock=us_ms, 
-        cn_debt_shock=cn_ds, 
-        cn_military_shock=cn_ms
+        us_debt_shock=us_ds, us_military_shock=us_ms, 
+        cn_debt_shock=cn_ds, cn_military_shock=cn_ms
     )
     raw = stress_pipeline.fetch_data(s, e)
-    
-    # Process scores and assign lifecycle stages
     scored = engine.calculate_power_index(raw)
     scored['Stage'] = scored.apply(engine.classify_lifecycle_stage, axis=1)
     return scored
@@ -59,10 +50,8 @@ def run_stress_pipeline(s, e, us_ds, us_ms, cn_ds, cn_ms):
 # ----------------------------------------------------------------------
 try:
     with st.spinner("Processing scenario models..."):
-        # Run the simulation data pipeline
         data = run_stress_pipeline(start_yr, end_yr, us_debt_shock, us_mil_shock, cn_debt_shock, cn_mil_shock)
         
-    # Isolate records for side-by-side metric rendering
     us_data = data[data['Country'] == 'US'].sort_values('year')
     cn_data = data[data['Country'] == 'CN'].sort_values('year')
     
@@ -74,9 +63,14 @@ try:
         st.subheader("🇺🇸 United States State Matrix")
         latest_us = us_data.iloc[-1]
         st.metric(label="Total Strength Index Score", value=f"{latest_us['Dalio_Power_Index']:.3f}")
-        st.info(f"**Calculated Lifecycle State**: {latest_us['Stage']}")
         
-        # Nested breakdown telemetry sub-cards
+        # Unified Blue status banner rendering layout via standard HTML blocks
+        st.markdown(
+            f'<div style="background-color:#1f77b4; color:white; padding:12px; border-radius:6px; margin-bottom:15px;">'
+            f'<strong>Calculated Lifecycle State</strong>: {latest_us["Stage"]}</div>', 
+            unsafe_allow_html=True
+        )
+        
         sub_us1, sub_us2 = st.columns(2)
         sub_us1.metric(label="Debt to GDP Ratio", value=f"{latest_us['Debt_To_GDP']:.1f}%")
         sub_us2.metric(label="Military Budget (% GDP)", value=f"{latest_us['Military_Exp']:.2f}%")
@@ -86,9 +80,14 @@ try:
         st.subheader("🇨🇳 China State Matrix")
         latest_cn = cn_data.iloc[-1]
         st.metric(label="Total Strength Index Score", value=f"{latest_cn['Dalio_Power_Index']:.3f}")
-        st.warning(f"**Calculated Lifecycle State**: {latest_cn['Stage']}")
         
-        # Nested breakdown telemetry sub-cards
+        # Unified Red status banner rendering layout via standard HTML blocks
+        st.markdown(
+            f'<div style="background-color:#d62728; color:white; padding:12px; border-radius:6px; margin-bottom:15px;">'
+            f'<strong>Calculated Lifecycle State</strong>: {latest_cn["Stage"]}</div>', 
+            unsafe_allow_html=True
+        )
+        
         sub_cn1, sub_cn2 = st.columns(2)
         sub_cn1.metric(label="Debt to GDP Ratio", value=f"{latest_cn['Debt_To_GDP']:.1f}%")
         sub_cn2.metric(label="Military Budget (% GDP)", value=f"{latest_cn['Military_Exp']:.2f}%")
@@ -96,35 +95,36 @@ try:
     # --- TIME-SERIES VISUAL CHART ---
     st.subheader("Relative System Trajectory Over Time")
     chart_data = data.pivot(index='year', columns='Country', values='Dalio_Power_Index')
-    st.line_chart(chart_data)
     
-    # --- RAW INDICATORS TABLE VIEW ---
-    st.subheader("📊 Underlying Analytical Indicators Matrix")
-    st.dataframe(data[['year', 'Country', 'Dalio_Power_Index', 'Debt_To_GDP', 'Military_Exp', 'Stage']], width='stretch')
+    # Enforce explicit symmetric color hex keys (Blue for US, Red for China)
+    st.line_chart(chart_data, color=["#d62728", "#1f77b4"])
+    
+    # ----------------------------------------------------------------------
+    # DIAGNOSTIC OPERATION TABS SECTION
+    # ----------------------------------------------------------------------
+    st.markdown("---")
+    st.subheader("⚙️ System Performance and Diagnostic Operations")
+    
+    tab1, tab2 = st.tabs(["Superpower Macro Trends", "MCP Server Automation Performance"])
+    
+    with tab1:
+        st.markdown("### 📊 Active Superpower System Data Summary")
+        st.markdown(
+            "Review the comprehensive data matrix below tracking multi-determinant vectors. "
+            "Use the side sliders to simulate crisis shocks and observe how they alter the trajectory trends "
+            "and lifecycle stages on the tracking chart layout above."
+        )
+        st.dataframe(data[['year', 'Country', 'Dalio_Power_Index', 'Debt_To_GDP', 'Military_Exp', 'Stage']], width='stretch')
+        
+    with tab2:
+        st.markdown("### Model Context Protocol (MCP) Stream Velocity Trends")
+        try:
+            bench_data = pd.read_csv("docs/mcp_performance_trends.csv")
+            bench_data = bench_data.set_index('Iteration')
+            st.line_chart(bench_data)
+            st.caption("Tracks engine response velocities in milliseconds across consecutive automated JSON-RPC loops.")
+        except FileNotFoundError:
+            st.info("💡 Run `python scripts/mcp_bench_reporter.py` to generate the performance trends plot data.")
 
 except Exception as e:
     st.error(f"Failed to execute visualization layer pipeline: {e}")
-
-# This creates an automated secondary tab on the Streamlit dashboard dedicated to system performance graphs
-
-st.markdown("---")
-st.subheader("⚙️ System Performance and Diagnostic Operations")
-
-# Create functional tabs separating macro analytics from engineering diagnostics
-tab1, tab2 = st.tabs(["Superpower Macro Trends", "MCP Server Automation Performance"])
-
-with tab1:
-    st.caption("Review superpower multi-determinant vectors inside the primary matrix above.")
-
-with tab2:
-    st.markdown("### Model Context Protocol (MCP) Stream Velocity Trends")
-    try:
-        # Dynamically read the generated CSV file directly from your docs directory
-        bench_data = pd.read_csv("docs/mcp_performance_trends.csv")
-        
-        # Format columns for scannable charting displays
-        bench_data = bench_data.set_index('Iteration')
-        st.line_chart(bench_data)
-        st.caption("Tracks engine response velocities in milliseconds across consecutive automated JSON-RPC loops.")
-    except FileNotFoundError:
-        st.info("💡 Run `python scripts/mcp_bench_reporter.py` to generate the performance trends plot data.")
