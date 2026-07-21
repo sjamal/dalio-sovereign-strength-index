@@ -21,3 +21,6 @@ Thumbs.db
 .agents
 # Streamlit agent skills (environment-specific symlinks)
 .agents/skills/developing-with-streamlit/
+
+# Exclude Compiled Automated Report Snapshots
+docs/*.txt

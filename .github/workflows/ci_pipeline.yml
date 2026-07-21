@@ -4,25 +4,25 @@ on:
   push:
     branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   validate_codebase:
     runs-on: ubuntu-latest
     steps:
-      # FIX: Updated core actions dependencies to their modern Node.js 24 releases
       - name: Checkout Code Repository
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
 
       - name: Setup Python Runtime Environment
-        uses: actions/setup-python@v5.1.1
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: '3.11'
-          cache: 'pip'
+          # Bypasses the corrupted cache registry layer to clear 400 Bad Request bugs
 
-      # Explicitly declare Node runtime parameters to bypass deprecation check flags
-      - name: Configure Action Environment Variables
-        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true" >> $GITHUB_ENV
+      # Force clear local action package runner pip cache arrays
+      - name: Purge Environment Cache Indices
+        run: |
+          python -m pip cache purge
 
       - name: Install System Dependencies
         run: |
