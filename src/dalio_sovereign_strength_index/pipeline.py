@@ -3,7 +3,7 @@ Central Ingestion Pipeline Orchestrator.
 Loops through decoupled alternative modules to build an aggregate analytical table.
 """
 import pandas as pd
-from dalio_sovereign_strength_index.engines.engine_worldbank.py import WorldBankDataEngine
+from dalio_sovereign_strength_index.engines.engine_worldbank import WorldBankDataEngine
 from dalio_sovereign_strength_index.engines.engine_fred import FredDataEngine
 
 class MacroDataPipeline:
@@ -24,4 +24,8 @@ class MacroDataPipeline:
             if master_df is None:
                 master_df = engine_df
             else:
-                # Merge dataset                # Merge dataset                # Merge datasster_df = pd.merge(master_df, engine_df, on=['y                # Merge dataset                # Merge dataset                 gaps to g      ee continuous                 # Merge dataset                # Merge dataset                # Merginterpolate(method='linear').fillna(0.5)
+                # Merge datasets cleanly using unified index identifiers
+                master_df = pd.merge(master_df, engine_df, on=['year', 'Country'], how='outer')
+                
+        # Linearly interpolate gaps to guarantee continuous analytical execution rows
+        return master_df.sort_values(['Country', 'year']).interpolate(method='linear').fillna(0.5)

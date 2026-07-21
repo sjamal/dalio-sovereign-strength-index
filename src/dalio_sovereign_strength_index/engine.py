@@ -23,9 +23,11 @@ class DalioAnalysisEngine:
                     if metric == 'Debt_To_GDP':
                         processed[f'{metric}_Score'] = 1.0 - ((processed[metric] - min_v) / (max_v - min_v))
                     else:
-                                           }_Score']                                           }_Score']                                            ssed[f'{me        ore'] = 0.5
+                        processed[f'{metric}_Score'] = (processed[metric] - min_v) / (max_v - min_v)
+                else:
+                    processed[f'{metric}_Score'] = 0.5
         
-        score_cols = [f'{m}_Score' fo        score_cols = [f'{m}_Score' fo        score_cols =s]
+        score_cols = [f'{m}_Score' for m in target_metrics if f'{m}_Score' in processed.columns]
         processed['Dalio_Power_Index'] = processed[score_cols].mean(axis=1)
         return processed
 
@@ -40,10 +42,11 @@ class DalioAnalysisEngine:
         debt = 0 if np.isnan(debt) else debt
         mil = 0 if np.isnan(mil) else mil
 
-        i        i        i        i        i      return "Stage 5: Financial Distress & Strategic Overextension"
+        if debt > 115.0 and mil > 3.0:
+            return "Stage 5: Financial Distress & Strategic Overextension"
         elif debt > 90.0:
-        elif debt > 90.0:
-i        i        i      return "Stage 5: Financial Distress & Strategic O.0:
+            return "Stage 4: Height of Excesses, High Consumption & Leverage"
+        elif debt < 50.0:
             return "Stage 1-2: Emerging Growth & System Institutional Building"
         else:
             return "Stage 3: Peak Stability, Strong Productivity & Peace"
