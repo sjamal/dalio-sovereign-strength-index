@@ -10,32 +10,31 @@ jobs:
   validate_codebase:
     runs-on: ubuntu-latest
     steps:
-      # FIX: Use native Linux git tools to eliminate legacy node action triggers completely
-      - name: Clone Code Repository Natively
-        run: |
-          git clone --depth 1 https://github.com .
-          git checkout ${{ github.ref_name }}
+      # Step 1: Securely pull the entire workspace branch cleanly using the modern release
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
 
-      # FIX: Enforce non-interactive frontends to eliminate exit code 100 failures
-      - name: Deploy Native Python 3.11 Environment Runtime
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y python3.11 python3.11-venv python3-pip
+      # Step 2: Establish the isolated Python 3.11 development environment runner
+      - name: Setup Python Runtime Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
+      # Step 3: Install all core required packages from the requirements manifest
       - name: Install System Dependencies
         run: |
-          python3.11 -m pip install --upgrade pip
-          python3.11 -m pip install -r requirements.txt
-          python3.11 -m pip install pytest
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
 
+      # Step 4: Run the integration verification passthrough trace loop
       - name: Verify Core Ingestion Pass
         run: |
           export PYTHONPATH=src
-          python3.11 src/run_brain.py
+          python src/run_brain.py
 
+      # Step 5: Execute the full pytest safety verification matrix checks
       - name: Run Test Verification Suite via Pytest
         run: |
           export PYTHONPATH=src
-          python3.11 -m pytest tests/
+          pytest tests/
