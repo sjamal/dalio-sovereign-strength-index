@@ -27,7 +27,7 @@ jobs:
 
       # FIX: Execute your isolated, math-verified test suite directly.
       # This completely bypasses third-party API network drops on public data center IPs.
-       Taras- name: Run Test and Chaos Verification Suite via Pytest
+      - name: Run Test and Chaos Verification Suite via Pytest
         run: |
           export PYTHONPATH=src
           pytest tests/
