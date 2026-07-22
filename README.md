@@ -1,5 +1,5 @@
 # 📈 Sovereign Strength Index Engine (`world-order-dynamics`)
-[![License: MIT](https://shields.io)](https://opensource.org)
+[![License: MIT](https://shields.io)](https://github.com)
 [![CI Pipeline](https://github.com)](https://github.com)
 
 An enterprise-grade quantitative macroeconomic simulation framework implementing the great empire lifecycle matrices from Ray Dalio's *\"Principles for Dealing with the Changing World Order\"* and the demographic workforce contraction variables from Peter Zeihan's models.
@@ -10,38 +10,18 @@ The core architecture is strictly decoupled, allowing independent ingestion data
 
 ## 🖥️ Streamlit Interface Dashboard Blueprint
 
-Below is a visual schematic map of the interactive frontend panel (`src/dalio_sovereign_strength_index/app_ui.py`) rendering your comparative superpower analytics tracks:
+Below is the layout specification mapping the dashboard interface (`src/dalio_sovereign_strength_index/app_ui.py`). It shows symmetric structural metrics panel views and side control sliders:
 
-```text
-+---------------------------------------------------------------------------------------+
+| 🎛️ Left Sidebar Controls | 🇺🇸 United States State Matrix (Blue Banner) | 🇨🇳 China State Matrix (Red Banner) |
+| :--- | :--- | :--- |
+| **Timeline Focus**<br>• Start Horizon Year (Slider)<br>• End Horizon Year (Slider) | **Total Strength Index Score**<br>• Dynamic Float Output Metric | **Total Strength Index Score**<br>• Dynamic Float Output Metric |
+| **🇺🇸 US Crisis Shocks**<br>• US Debt Shock Addition (%)<br>• US Military Alteration (% GDP) | **Calculated Lifecycle State**<br>• Text Status: e.g., Stage 5 Overextension | **Calculated Lifecycle State**<br>• Text Status: e.g., Stage 4 Height of Excesses |
+| **🇨🇳 China Crisis Shocks**<br>• China Debt Shock Addition (%)<br>• China Military Alteration (% GDP) | **Telemetry Indicators Breakdown**<br>• Debt to GDP Ratio (%)<br>• Military Budget (% GDP) | **Telemetry Indicators Breakdown**<br>• Debt to GDP Ratio (%)<br>• Military Budget (% GDP) |
+| | **Relative Trajectory Trend Line Chart**<br>• Blue Line: United States Trajectory | **Relative Trajectory Trend Line Chart**<br>• Red Line: China Trajectory |
 
-| 🧠 Sovereign Strength Index Dashboard                                                 |
-| Ingesting real-time multi-determinant arrays across global sovereign regimes          |
-+---------------------------------------------------------------------------------------+
-
-| [ SIDEBAR CONTROLS ]        |  🇺🇸 United States Matrix     |  🇨🇳 China Matrix         |
-|                             |  Total Power: [ 0.667 ]     |  Total Power: [ 0.246 ]  |
-|  Timeline Focus             |  +------------------------+ |  +---------------------+ |
-|  [ Start: 2018 | End: 2025 ]|  | State: Stage 5 (Blue)  | |  | State: Stage 4 (Red)| |
-|                             |  +------------------------+ |  +---------------------+ |
-|  🇺🇸 US Crisis Shocks       |  - Debt-to-GDP: 128.5%     |  - Debt-to-GDP: 88.3%   |
-|  - Debt Shock:   [ +15% ]   |  - Mil. Budget: 3.40%      |  - Mil. Budget: 1.70%   |
-|  - Mil. Budget:  [ +0.0% ]  |                             |                          |
-|                             |  ----------------------------------------------------- |
-|  🇨🇳 China Crisis Shocks    |  [ Relative Trajectory Chart Trend Plots Lines ]       |
-|  - Debt Shock:   [ +0.0% ]  |  1.0 |                    /--[China (Red)]             |
-|  - Mil. Budget:  [ +1.5% ]  |  0.5 |  \----------------                              |
-|                             |  0.0 +-----------------------[US (Blue)]----           |
-|                             |        2018      2020      2022      2024    2026      |
-+---------------------------------------------------------------------------------------+
-
-| ⚙️ System Performance and Diagnostic Operations                                       |
-|  +-------------------------------------+ +------------------------------------------+ |
-|  | Tab 1: Superpower Macro Trends [ACT] | | Tab 2: MCP Server Stream Performance     | |
-|  +-------------------------------------+ +------------------------------------------+ |
-|  | - Displays raw numeric matrices tables tracking combined data arrays from APIs.   | |
-|  +----------------------------------------------------------------------------------+ |
-```
+### ⚙️ System Performance and Diagnostic Operations Tabs
+*   **Tab 1: Superpower Macro Trends (Active View)**: Renders the active multi-variable pandas tracking data matrix table data directly on the screen layout.
+*   **Tab 2: MCP Server Automation Performance**: Renders the historical JSON-RPC looping speeds data arrays line chart dynamically pulling from the local `.csv` metrics sheet.
 
 ---
 
@@ -88,7 +68,7 @@ pip install pytest streamlit
 ```
 
 ### 2. Verify System Integrity
-Execute your complete calculation and chaos-engineering test suites locally:
+Execute the complete calculation and chaos-engineering test suites locally:
 ```bash
 export PYTHONPATH=src
 pytest tests
@@ -108,18 +88,18 @@ pytest tests
 
 ## 🤝 Branch Strategy & Open Source Contributions
 
-We operate a strict, professional branch lifecycle model to ensure high codebase quality. Please see `CONTRIBUTING.md` for our full onboarding guidelines.
+A strict, professional branch lifecycle model is operated to ensure high codebase quality. Please see `CONTRIBUTING.md` for full onboarding guidelines.
 
-*   `main`: Houses our immutable, stable, production-ready release footprint.
-*   `develop`: The central staging integration branch. All custom feature tasks merge here via Pull Requests (PRs) after clearing active unit test assertions.
+*   `main`: Houses the immutable, stable, production-ready release footprint.
+*   `develop`: The central staging integration branch. All feature tasks merge here via Pull Requests (PRs) after clearing active unit test assertions.
 
 ---
 
 ## 🏛️ Scholastic Appendix: The Macro Reality of Dalio's Big Cycles
 
-Users reviewing standard historical timelines will observe that calculated lifecycle status bounds remain fixed across standard horizons (United States locked in Stage 5, China locked in Stage 4). This behavior is theoretically deliberate.
+Reviewing standard historical timelines demonstrates that calculated lifecycle status bounds remain fixed across standard horizons (United States locked in Stage 5, China locked in Stage 4). This behavior is mathematically deliberate.
 
 In Ray Dalio's historical framework, an empire's full "Big Cycle" transpires over **200 to 250 years**. Short-term windows represent distinct frames at the tail-end of a multi-century regime.
 
-*   **The United States (Stage 5)** represents an empire experiencing high financial leverage coupled with global strategic overextension. The engine locks it here due to structural Debt-to-GDP parameters exceeding 115% combined with significant hard-power military commitments.
-*   **China (Stage 4)** represents the ascendant competitor empire. It has advanced past productivity rebuilding (Stage 3) into a phase of rapid infrastructure accumulation and leverage growth, positioning it firmly within the "Height of Excesses" parameters.
+*   **The United States (Stage 5)** represents an empire experiencing high financial leverage coupled with global strategic overextension. The engine locks the status here due to structural Debt-to-GDP parameters exceeding 115% combined with significant hard-power military commitments.
+*   **China (Stage 4)** represents the ascendant competitor empire. Advancement has passed productivity rebuilding (Stage 3) into a phase of rapid infrastructure accumulation and leverage growth, positioning the asset firmly within the "Height of Excesses" parameters.
