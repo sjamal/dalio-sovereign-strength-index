@@ -1,5 +1,5 @@
 # 📈 Sovereign Strength Index Engine (`world-order-dynamics`)
-[![License: MIT](https://shields.ioLicense-MIT-blue)](https://github.com/sjamal/dalio-sovereign-strength-index/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/github/license/sjamal/dalio-sovereign-strength-index)](https://github.com/sjamal/dalio-sovereign-strength-index/blob/main/LICENSE)
 [![CI Pipeline](https://github.com/sjamal/dalio-sovereign-strength-index/actions/workflows/ci_pipeline.yml/badge.svg)](https://github.com/sjamal/dalio-sovereign-strength-index/actions/workflows/ci_pipeline.yml)
 
 An enterprise-grade quantitative macroeconomic simulation framework implementing the great empire lifecycle matrices from Ray Dalio's *\"Principles for Dealing with the Changing World Order\"* and the demographic workforce contraction variables from Peter Zeihan's models.
